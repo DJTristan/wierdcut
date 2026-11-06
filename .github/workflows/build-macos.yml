@@ -17,7 +17,9 @@ jobs:
       - name: Configure plugin
         run: |
           cmake -S WarpCutLite -B build \
-            -DCMAKE_BUILD_TYPE=Release
+cmake -S WarpCutLite -B build \
+  -DCMAKE_BUILD_TYPE=Release \
+  -DCMAKE_OSX_ARCHITECTURES=arm64
 
       - name: Compile plugin
         run: cmake --build build --config Release --parallel 4
