@@ -18,7 +18,9 @@ jobs:
       - name: Configure plugin for Apple Silicon
         run:cmake -S WarpCutLite -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"
       - name: Compile plugin
-        run: cmake --build build --config Release --parallel 4
+        run: 
+        run: 'cmake -S WarpCutLite -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES="x86_64;arm64"'
+
 
       - name: Package plugins
         run: |
