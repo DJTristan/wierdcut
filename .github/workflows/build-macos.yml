@@ -1,0 +1,36 @@
+
+name: Build WarpCut Lite for Mac
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      - name: Configure plugin
+        run: |
+          cmake -S WarpCutLite -B build \
+            -DCMAKE_BUILD_TYPE=Release
+
+      - name: Compile plugin
+        run: cmake --build build --config Release --parallel 4
+
+      - name: Package VST3 and AU plugins
+        run: |
+          mkdir -p plugins
+          find build -name "*.vst3" -exec cp -R {} plugins/ \;
+          find build -name "*.component" -exec cp -R {} plugins/ \;
+
+      - name: Upload compiled plugins
+        uses: actions/upload-artifact@v4
+        with:
+          name: WarpCutLite-Mac-Plugins
+          path: plugins/
+          if-no-files-found: error
