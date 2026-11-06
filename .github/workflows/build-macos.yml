@@ -2,37 +2,35 @@
 name: Build WarpCut Lite for Mac
 
 on:
-  workflow_dispatch:
   push:
-    branches: [main]
+    branches:
+      - main
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: macos-15-intel
 
     steps:
-      - name: Checkout source code
+      - name: Checkout source
         uses: actions/checkout@v4
 
-      - name: Configure plugin
-        run: |
-          cmake -S WarpCutLite -B build \
-cmake -S WarpCutLite -B build \
-  -DCMAKE_BUILD_TYPE=Release \
-  -DCMAKE_OSX_ARCHITECTURES=arm64
+      - name: Configure plugin for Apple Silicon
+        run: cmake -S WarpCutLite -B build -DCMAKE_BUILD_TYPE=Release -DCMAKE_OSX_ARCHITECTURES=arm64
 
       - name: Compile plugin
         run: cmake --build build --config Release --parallel 4
 
-      - name: Package VST3 and AU plugins
+      - name: Package plugins
         run: |
           mkdir -p plugins
           find build -name "*.vst3" -exec cp -R {} plugins/ \;
           find build -name "*.component" -exec cp -R {} plugins/ \;
+          find plugins -type f -name "*.dylib" -exec file {} \;
 
-      - name: Upload compiled plugins
+      - name: Upload plugins
         uses: actions/upload-artifact@v4
         with:
-          name: WarpCutLite-Mac-Plugins
+          name: WarpCutLite-AppleSilicon
           path: plugins/
           if-no-files-found: error
