@@ -1,0 +1,16 @@
+WarpCut Lite v0.1 (prototype) — IMPORTANT
+
+THIS ZIP DOES NOT CONTAIN AN INSTALLABLE PLUGIN YET.
+It contains C++ source code and a build helper for macOS.
+
+To make .vst3 and .component files on your Mac:
+1. Unzip the package.
+2. Install Apple's Xcode Command Line Tools (open Terminal and type: xcode-select --install).
+3. Install CMake for macOS from https://cmake.org/download/ (or Homebrew: brew install cmake).
+4. Right-click 'BUILD ON MAC.command' and choose Open. If macOS blocks it, open Terminal, type 'bash ' (with a space), drag the command file into Terminal, and press Return.
+5. An internet connection is needed during the first build, to download JUCE.
+6. If the build completes, it installs the plugin in your user-level Audio Plug-Ins folders. Restart Ableton Live and rescan plugins.
+
+NOTE: This is an untested, independent WarpCut-style prototype, NOT the original LiveCut algorithm. It is possible that source fixes will be needed before compilation succeeds. There is no guarantee it sounds like LiveCut yet.
+
+If your only goal is to click and install a ready-made Mac plugin, this source package is not that; a macOS build and test are required.

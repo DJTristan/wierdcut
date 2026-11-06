@@ -1,0 +1,30 @@
+WARPCUT LITE -- GITHUB BUILD (MAC)
+================================
+
+This is an UNTESTED early prototype, not an installable plugin yet.
+GitHub Actions will attempt to build macOS AU and VST3 plugin bundles.
+
+1. On GitHub click + (top right) -> New repository.
+2. Name it WarpCutLite. Select Public. Do NOT tick Add README / .gitignore / license (start empty).
+3. Create repository.
+4. Open the ZIP on your Mac. Open the extracted WarpCutLite folder.
+5. In Finder press Command+Shift+. (period) to display the hidden .github folder.
+6. On your new GitHub repository page choose 'uploading an existing file'. Drag ALL contents
+   of the WarpCutLite folder to the upload area (the .github folder too).
+   IMPORTANT: the files CMakeLists.txt, Source/ and .github/ must be at the ROOT
+   of your repository, NOT inside a second WarpCutLite folder.
+7. Choose Commit changes.
+8. Click Actions -> Build WarpCut Lite for Mac. The workflow should start from the push.
+   If not, click Run workflow (the main branch).
+9. Once complete, open the workflow run and download artifact 'WarpCutLite-Mac-Plugins'.
+   It contains separate AU and VST3 ZIP files. Test VST3 first.
+
+For first testing: quit Ableton. Unzip the VST3 ZIP and copy the .vst3 directory to:
+  ~/Library/Audio/Plug-Ins/VST3/
+Restart Ableton and rescan. Use a blank Ableton set and save other work first.
+
+Not notarised or signed. macOS can block unsigned plugins, and Ableton could crash
+because this is a prototype. A failed GitHub build will show build logs to debug.
+
+NOTE: This is an independently written Warp Cut-inspired prototype, not a faithful
+port of the original LiveCut Warp Cut algorithm.
