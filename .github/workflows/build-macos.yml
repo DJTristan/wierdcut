@@ -1,4 +1,3 @@
-
 name: Build WarpCut Lite for Mac
 
 on:
@@ -21,16 +20,29 @@ jobs:
       - name: Compile plugin
         run: cmake --build build --config Release --parallel 4
 
-      - name: Package plugins
+      - name: Package, sign and check plugins
+        shell: bash
         run: |
+          set -euo pipefail
           mkdir -p plugins
-          find build -name "*.vst3" -type d -exec cp -R {} plugins/ \;
-          find build -name "*.component" -type d -exec cp -R {} plugins/ \;
-          find plugins -type f -perm -111 -exec file {} \;
+          VST3=$(find build -type d -name '*.vst3' -print -quit)
+          AU=$(find build -type d -name '*.component' -print -quit)
+          test -n "$VST3" && test -n "$AU"
+          ditto "$VST3" "plugins/$(basename "$VST3")"
+          ditto "$AU" "plugins/$(basename "$AU")"
+          codesign --force --deep --sign - "plugins/$(basename "$VST3")"
+          codesign --force --deep --sign - "plugins/$(basename "$AU")"
+          codesign --verify --deep --strict --verbose=2 "plugins/$(basename "$VST3")"
+          codesign --verify --deep --strict --verbose=2 "plugins/$(basename "$AU")"
+          file "plugins/$(basename "$VST3")/Contents/MacOS/WarpCut Lite"
+          file "plugins/$(basename "$AU")/Contents/MacOS/WarpCut Lite"
+          test -x "plugins/$(basename "$VST3")/Contents/MacOS/WarpCut Lite"
+          test -x "plugins/$(basename "$AU")/Contents/MacOS/WarpCut Lite"
+          tar -czf WarpCutLite-Universal-Mac.tar.gz -C plugins .
 
-      - name: Upload plugins
+      - name: Upload permission-preserving package
         uses: actions/upload-artifact@v4
         with:
-          name: WarpCutLite-Universal-Mac
-          path: plugins/
+          name: WarpCutLite-Fixed-Package
+          path: WarpCutLite-Universal-Mac.tar.gz
           if-no-files-found: error
